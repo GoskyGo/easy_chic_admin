@@ -1,5 +1,5 @@
 import axios from 'axios'
-import json from '~/jsconfig.json'
+import json from '~/config.json'
 
 const apiBase = !process.env.apiBase.trim() ? window.location.origin + '/' : process.env.apiBase
 

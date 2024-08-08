@@ -1,4 +1,4 @@
-const configJson = require('./jsconfig.json')
+const configJson = require('./config.json')
 
 const isDemo = process.env.IS_DEMO === 'true'
 let apiBase = !process.env.API_BASE.trim() ? '/' : process.env.API_BASE

@@ -1,4 +1,4 @@
-import json from './../jsconfig.json'
+import json from './../config.json'
 
 export default {
   data() {
