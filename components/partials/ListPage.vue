@@ -159,7 +159,7 @@
             },
             api: this.listApi
           })
-
+         
           this.$emit('list', this.list)
 
           this.loading = false

@@ -15,6 +15,59 @@
       class="right-area"
     >
       <div class="sticky">
+        <div class="tab-sidebar mb-20 mlr-lg-15 mlr-md mb-md-15">
+          <h4 class="title">
+            <span class="mr-5">{{ $t('prod.pImg') }}</span>
+            <span class="fw-400 f-8">{{ $t('prod.suggImg') }}</span>
+          </h4>
+
+          <div v-if="!loading">
+            <div
+              v-if="$can('product', 'edit') || $can('product', 'create')"
+              class="form-wrapper upload-block"
+            >
+              <error-formatter
+                type="image"
+              />
+
+              <image-input
+                v-if="mediaStorageData.URL === mediaStorage"
+                :saving="fileUploading"
+                :image="result.image"
+                @image-change="imageInputChanged"
+              />
+              <file-upload
+                v-else
+                class="upload-block"
+                :image="result.image"
+                :file-uploading="fileUploading"
+                @file-upload="uploadFile"
+              />
+            </div>
+
+            <img
+              v-else-if="$can('product', 'view')"
+              class="mx-w-300x"
+              :src="getImageURL(result.image)"
+            >
+          </div>
+
+        </div>
+
+        <div
+          class="tab-sidebar mb-md-15"
+          v-if="!isAdding"
+        >
+          <h4 class="title">
+            <span class="mr-5">{{ $t('prod.pImgs') }}</span>
+            <span class="fw-400 f-8">{{ $t('prod.suggImg') }}</span>
+          </h4>
+
+          <product-images
+            :product-images="result.product_images"
+            @result="productImages"
+          />
+        </div>
         <div class="tab-sidebar mb-20 mb-lg mb-md-15">
           <h4 class="title">
             <span class="mr-5">{{ $t('prod.pVideo') }}</span>
@@ -73,59 +126,7 @@
           </video>
         </div>
 
-        <div class="tab-sidebar mb-20 mlr-lg-15 mlr-md mb-md-15">
-          <h4 class="title">
-            <span class="mr-5">{{ $t('prod.pImg') }}</span>
-            <span class="fw-400 f-8">{{ $t('prod.suggImg') }}</span>
-          </h4>
-
-          <div v-if="!loading">
-            <div
-              v-if="$can('product', 'edit') || $can('product', 'create')"
-              class="form-wrapper upload-block"
-            >
-              <error-formatter
-                type="image"
-              />
-
-              <image-input
-                v-if="mediaStorageData.URL === mediaStorage"
-                :saving="fileUploading"
-                :image="result.image"
-                @image-change="imageInputChanged"
-              />
-              <file-upload
-                v-else
-                class="upload-block"
-                :image="result.image"
-                :file-uploading="fileUploading"
-                @file-upload="uploadFile"
-              />
-            </div>
-
-            <img
-              v-else-if="$can('product', 'view')"
-              class="mx-w-300x"
-              :src="getImageURL(result.image)"
-            >
-          </div>
-
-        </div>
-
-        <div
-          class="tab-sidebar mb-md-15"
-          v-if="!isAdding"
-        >
-          <h4 class="title">
-            <span class="mr-5">{{ $t('prod.pImgs') }}</span>
-            <span class="fw-400 f-8">{{ $t('prod.suggImg') }}</span>
-          </h4>
-
-          <product-images
-            :product-images="result.product_images"
-            @result="productImages"
-          />
-        </div>
+       
       </div>
     </div>
 
@@ -179,14 +180,14 @@
                 name="slug"
                 v-model="result.slug"
                 ref="slug"
-                :class="{invalid: !!!result.slug && hasError}"
+            
               >
-              <span
+              <!-- <span
                 class="error"
                 v-if="!!!result.slug && hasError"
               >
                 {{ $t('category.req', { type: $t('category.slug')}) }}
-              </span>
+              </span> -->
             </div>
 
 
@@ -330,36 +331,34 @@
 
             <div
               class="input-wrapper"
-              :class="{'whysigwyg-error': !!!result.overview && hasError}"
             >
               <WYSIWYGEditor
                 :title="$t('prod.overview')"
-                :description="result.overview"
+                :overview="result.overview"
                 @change="result.overview = $event"
                 @file="editorOverviewFile"
               />
-              <span
+              <!-- <span
                 class="error"
                 v-if="!!!result.overview && hasError"
               >
               {{ $t('category.req', { type: $t('prod.overview')}) }}
-            </span>
+            </span> -->
             </div>
             <div
               class="input-wrapper"
-              :class="{'whysigwyg-error': !!!result.description && hasError}"
             >
               <WYSIWYGEditor
                 :description="result.description"
                 @change="result.description = $event"
                 @file="editorDescriptionFile"
               />
-              <span
+              <!-- <span
                 class="error"
                 v-if="!!!result.description && hasError"
               >
               {{ $t('category.req', { type: $t('prod.desc')}) }}
-            </span>
+            </span> -->
             </div>
 
             <div class="dply-felx inputs mlr--7-5">
@@ -853,6 +852,7 @@
       },
       async uploadFile(file, name = null){
         this.fileUploading = true
+
         try {
 
           let params = {}
@@ -869,9 +869,9 @@
             })
             params['photo'] = name
           }
-
+          
           const data = await this.setImageById({id: this.id, params: params, api: this.setImageApi})
-
+          
           if (data) {
             this.result = Object.assign({}, data)
             this.result.product_collections = [...new Set(this.result?.product_collections?.map((o)=>{return o.product_collection_id}))]

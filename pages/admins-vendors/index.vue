@@ -11,8 +11,10 @@
   >
     <template v-slot:table="{list}">
       <tr class="lite-bold">
+        <th>{{ $t('setting.sName') }}</th>
         <th>{{ $t('user.name') }}</th>
         <th>{{ $t('user.uName') }}</th>
+        <th>{{ $t('fSale.phone') }}</th>
         <th>{{ $t('fSale.email') }}</th>
         <th>{{ $t('user.role') }}</th>
         <th>{{ $t('user.verified') }}</th>
@@ -26,6 +28,7 @@
         :key="index"
         :class="{'new-data': !parseInt(value.viewed)}"
       >
+        <td>{{ value.store }}</td>
         <td class="">
           <nuxt-link
             class="link"
@@ -35,6 +38,7 @@
           </nuxt-link>
         </td>
         <td>{{ value.username }}</td>
+        <td>{{ value.phone }}</td>
         <td>{{ value.email }}</td>
         <td>
           <span
