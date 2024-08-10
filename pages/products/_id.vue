@@ -24,7 +24,7 @@
           <div v-if="!loading">
             <div
               v-if="$can('product', 'edit') || $can('product', 'create')"
-              class="form-wrapper upload-block"
+              class="form-wrapper upload-block "
             >
               <error-formatter
                 type="image"
@@ -151,6 +151,7 @@
             v-if="productFormOpen"
             class="form-wrapper b-t"
             @submit.prevent="checkForm"
+            
             :class="{'has-error': hasError}"
           >
             <error-formatter />
@@ -180,7 +181,7 @@
                 name="slug"
                 v-model="result.slug"
                 ref="slug"
-            
+                disabled
               >
               <!-- <span
                 class="error"
@@ -518,14 +519,13 @@
                 type="text"
                 :placeholder="$t('category.mTitle')"
                 v-model="result.meta_title"
-                :class="{invalid: !!!result.meta_title && hasError}"
               >
-              <span
+              <!-- <span
                 class="error"
                 v-if="!!!result.meta_title && hasError"
               >
               {{ $t('category.req', { type: $t('category.mTitle')}) }}
-            </span>
+            </span> -->
             </div>
 
             <div class="input-wrapper">
@@ -533,14 +533,13 @@
               <textarea
                 :placeholder="$t('category.mDesc')"
                 v-model="result.meta_description"
-                :class="{invalid: !!!result.meta_description && hasError}"
               />
-              <span
+              <!-- <span
                 class="error"
                 v-if="!!!result.meta_description && hasError"
               >
               {{ $t('category.req', { type: $t('category.mDesc')}) }}
-            </span>
+            </span> -->
             </div>
 
             <div
@@ -656,6 +655,7 @@
         redirect: false,
         fileUploading: false,
         videoUploading: false,
+        imageUpload:false
       }
     },
     directives: {
@@ -716,6 +716,16 @@
         'allBrands','allProductCollections','allBundleDeals', 'allShippingRules'])
     },
     methods: {
+      slugChange(){
+        console.log(this.result.id);
+        
+        if (this.result.id =="" || this.result.id ==null ){
+          this.result.title=""
+          alert('¡Por favor cargue la imagen del producto!')
+        }else{
+          this.result.slug=this.result.title;
+        }
+      },
       closeDrop(){
         this.showCategories = false
       },
@@ -769,10 +779,10 @@
         this.redirect = buttonType === 'save'
       },
       async checkForm() {
-        if(this.validationKeys.findIndex((i) => { return (!this.result[i]) }) > -1){
-          this.hasError = true
-          return false
-        }
+        // if(this.validationKeys.findIndex((i) => { return (!this.result[i]) }) > -1){
+        //   this.hasError = true
+        //   return false
+        // }
         this.redirectingEnable(event.submitter.name)
         this.formSubmitting = true
         try {
